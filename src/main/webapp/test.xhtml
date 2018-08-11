@@ -14,12 +14,13 @@
 
 	<h1>#{testViewCdi.testString}</h1>
 
-	<h:form>
+	<h:form id="form">
 		<p:growl id="messages" showDetail="true" />
 
 		<p:tree id="docs" value="#{treeContextMenuView.root}" var="doc"
 			selectionMode="single"
 			selection="#{treeContextMenuView.selectedNode}" dynamic="true">
+			<p:ajax event="select" update="form:contextMenu" />
 			<p:treeNode expandedIcon="ui-icon-folder-open"
 				collapsedIcon="ui-icon-folder-collapsed">
 				<h:outputText value="#{doc.name}" />
@@ -35,10 +36,13 @@
 			</p:treeNode>
 		</p:tree>
 
-		<p:contextMenu for="docs">
+		<p:contextMenu for="docs" id="contextMenu">
 			<p:menuitem value="View" update="messages"
 				actionListener="#{treeContextMenuView.displaySelectedSingle}"
 				icon="ui-icon-search" />
+			<p:menuitem value="Item for Documents"
+				rendered="#{treeContextMenuView.selectedNode.data.name eq 'Documents'}"
+				icon="ui-icon-print" />
 			<p:menuitem value="Delete" update="docs"
 				actionListener="#{treeContextMenuView.deleteNode}"
 				icon="ui-icon-close" />
